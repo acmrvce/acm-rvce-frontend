@@ -5,11 +5,15 @@ import * as Icons from "lucide-react";
 
 // --- Font Injection (Ensuring consistency if used in isolation) ---
 const FooterFonts = () => (
-  <style dangerouslySetInnerHTML={{__html: `
+  <style
+    dangerouslySetInnerHTML={{
+      __html: `
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap');
     .font-footer { font-family: 'Manrope', sans-serif; }
     .font-footer-tech { font-family: 'Space Grotesk', monospace; }
-  `}} />
+  `,
+    }}
+  />
 );
 
 interface FooterProps {
@@ -18,7 +22,13 @@ interface FooterProps {
 }
 
 // Helper to get icon component dynamically
-const IconComponent = ({ name, className }: { name: string, className?: string }) => {
+const IconComponent = ({
+  name,
+  className,
+}: {
+  name: string;
+  className?: string;
+}) => {
   const LucideIcon = (Icons as any)[name];
   if (!LucideIcon) return null;
   return <LucideIcon className={cn("w-5 h-5", className)} />;
@@ -26,9 +36,14 @@ const IconComponent = ({ name, className }: { name: string, className?: string }
 
 const Footer = ({ className, config }: FooterProps) => {
   return (
-    <footer className={cn("relative w-full bg-white dark:bg-[#050505] text-neutral-900 dark:text-white font-footer border-t border-neutral-200 dark:border-white/10", className)}>
+    <footer
+      className={cn(
+        "relative w-full bg-white dark:bg-[#050505] text-neutral-900 dark:text-white font-footer border-t border-neutral-200 dark:border-white/10",
+        className
+      )}
+    >
       <FooterFonts />
-      
+
       {/* Decorative Grid Background */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#808080_1px,transparent_1px)] bg-[size:40px_40px]" />
@@ -36,51 +51,55 @@ const Footer = ({ className, config }: FooterProps) => {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-12">
-        
         {/* 1. Large Call to Action Section */}
         <div className="py-20 md:py-32 border-b border-neutral-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
-            <div className="max-w-3xl">
-                <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-blue-600">
-                    Ready to <br/>
-                    <span className="text-neutral-400 dark:text-neutral-600">Innovate?</span>
-                </h2>
-            </div>
-            
-            <div className="flex flex-col gap-6 items-start md:items-end">
-                <p className="text-lg text-neutral-500 dark:text-neutral-400 max-w-sm text-left md:text-right leading-relaxed">
-                    Join our community of developers, designers, and innovators building the future.
-                </p>
-                <a 
-                    href="/join" 
-                    className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-blue-600 dark:bg-white px-8 font-medium text-white dark:text-black transition-all hover:scale-105"
-                >
-                    <span className="relative z-10 flex items-center gap-2">
-                        Get Started <Icons.ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </span>
-                </a>
-            </div>
+          <div className="max-w-3xl">
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-blue-600">
+              Ready to <br />
+              <span className="text-neutral-400 dark:text-neutral-600">
+                Innovate?
+              </span>
+            </h2>
+          </div>
+
+          <div className="flex flex-col gap-6 items-start md:items-end">
+            <p className="text-lg text-neutral-500 dark:text-neutral-400 max-w-sm text-left md:text-right leading-relaxed">
+              Join our community of developers, designers, and innovators
+              building the future.
+            </p>
+            <a
+              href="/join"
+              className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-blue-600 dark:bg-white px-8 font-medium text-white dark:text-black transition-all hover:scale-105"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Get Started{" "}
+                <Icons.ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </span>
+            </a>
+          </div>
         </div>
 
         {/* 2. Main Footer Grid */}
         <div className="py-16 grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24">
-          
           {/* Brand Column */}
           <div className="md:col-span-4 flex flex-col gap-6">
             <div className="flex items-center gap-3">
               {config.brand.logoSrc ? (
                 <div className="relative h-10 w-10 overflow-hidden rounded-lg bg-white p-1">
-                    <img
+                  <img
                     src={config.brand.logoSrc}
                     alt={`${config.brand.title} Logo`}
                     className="object-contain w-full h-full"
-                    />
+                  />
                 </div>
               ) : (
                 <div className="h-10 w-10 bg-neutral-900 dark:bg-white rounded-lg" />
               )}
-              <span className="text-xl font-bold tracking-tight uppercase font-footer-tech">{config.brand.title}</span>
+              <span className="text-xl font-bold tracking-tight uppercase font-footer-tech">
+                {config.brand.title}
+              </span>
             </div>
-            
+
             <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-sm">
               {config.brand.description}
             </p>
@@ -133,18 +152,27 @@ const Footer = ({ className, config }: FooterProps) => {
         <div className="border-t border-neutral-200 dark:border-white/10 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500 dark:text-neutral-500 font-footer-tech uppercase tracking-wider">
           <p>{config.copyright}</p>
           <div className="flex gap-8">
-            <a href="/privacy" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Privacy Policy</a>
-            <a href="/terms" className="hover:text-neutral-900 dark:hover:text-white transition-colors">Terms of Service</a>
+            <a
+              href="/privacy"
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="/terms"
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              Terms of Service
+            </a>
           </div>
         </div>
 
         {/* Massive Watermark (Optional: Adds huge depth) */}
-        <div className="absolute bottom-0 left-0 right-0 overflow-hidden pointer-events-none select-none opacity-[0.03] dark:opacity-[0.05]">
-            <h1 className="text-[15vw] font-bold leading-none text-blue-700 text-center whitespace-nowrap translate-y-[30%]">
-                ACM RVCE
-            </h1>
+        <div className="absolute bottom-0 left-0 right-0 overflow-hidden pointer-events-none select-none opacity-[0.08] dark:opacity-[0.05]">
+          <h1 className="text-[15vw] font-bold leading-none text-blue-600 dark:text-white text-center whitespace-nowrap translate-y-[30%]">
+            ACM RVCE
+          </h1>
         </div>
-
       </div>
     </footer>
   );

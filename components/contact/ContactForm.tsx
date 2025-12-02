@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useRef } from "react";
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import { fadeInUpVariants, formFieldVariants } from "@/lib/config/animations";
 import { ContactFormField } from "@/lib/config/contact";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
+
+// Spotlight Card Component
+const SpotlightCard = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  const background = useMotionTemplate`
+    radial-gradient(500px circle at ${mouseX}px ${mouseY}px, rgba(255,255,255,0.1), transparent 80%)
+  `;
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      className={cn("group relative overflow-hidden rounded-xl", className)}
+    >
+      <motion.div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background }}
+      />
+      <div className="relative">{children}</div>
+    </div>
+  );
+};
 
 interface ContactFormProps {
   fields: ContactFormField[];
@@ -19,7 +57,7 @@ interface ContactFormProps {
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({
-  fields, 
+  fields,
   submitButtonText,
   successMessage,
   errorMessage,
@@ -67,7 +105,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
       value: formState[field.id] || "",
       onChange: handleInputChange,
       className:
-        "w-full bg-white/5 dark:bg-black/5 backdrop-blur-sm border-input focus:border-primary rounded-md",
+        "w-full bg-white dark:bg-neutral-900 border-neutral-200 dark:border-white/10 focus:border-blue-600 dark:focus:border-blue-500 rounded-lg transition-all duration-300 hover:border-neutral-300 dark:hover:border-white/20",
       "aria-label": field.label,
     };
 
@@ -123,7 +161,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
     >
       {formStatus === "success" ? (
         <motion.div
-          className="bg-primary-foreground/5 backdrop-blur-sm p-6 rounded-lg border border-primary shadow-md"
+          className="bg-white dark:bg-neutral-900 p-4 md:p-6 rounded-xl border border-green-500/30 shadow-md"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
@@ -135,7 +173,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
             <Button
               onClick={() => setFormStatus("idle")}
               variant="outline"
-              className="mt-4"
+              className="mt-4 border-neutral-200 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20"
             >
               Send Another Message
             </Button>
@@ -143,7 +181,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
         </motion.div>
       ) : formStatus === "error" ? (
         <motion.div
-          className="bg-primary-foreground/5 backdrop-blur-sm p-6 rounded-lg border border-destructive shadow-md"
+          className="bg-white dark:bg-neutral-900 p-4 md:p-6 rounded-xl border border-red-500/30 shadow-md"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
@@ -157,39 +195,43 @@ const ContactForm: React.FC<ContactFormProps> = ({
             <Button
               onClick={() => setFormStatus("idle")}
               variant="outline"
-              className="mt-4"
+              className="mt-4 border-neutral-200 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20"
             >
               Try Again
             </Button>
           </div>
         </motion.div>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-1 p-6 bg-card/60 backdrop-blur-sm border border-border rounded-lg shadow-sm"
-        >
-          {fields.map(renderFormControl)}
-
-          <motion.div
-            className="pt-4"
-            variants={formFieldVariants}
-            custom={fields.length}
+        <SpotlightCard>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-1 p-4 md:p-6 lg:p-8 border border-neutral-200 dark:border-white/10 rounded-xl shadow-sm transition-all duration-300 hover:border-neutral-300 dark:hover:border-white/20"
           >
+            {fields.map(renderFormControl)}
+
             <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="pt-4"
+              variants={formFieldVariants}
+              custom={fields.length}
             >
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
-                disabled={formStatus === "submitting"}
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                {formStatus === "submitting" ? "Sending..." : submitButtonText}
-              </Button>
+                <Button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors duration-300"
+                  disabled={formStatus === "submitting"}
+                >
+                  {formStatus === "submitting"
+                    ? "Sending..."
+                    : submitButtonText}
+                </Button>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </form>
+          </form>
+        </SpotlightCard>
       )}
     </motion.div>
   );

@@ -129,6 +129,18 @@ export const contactConfig: ContactConfig = {
         value: "acm@rvce.edu.in",
         link: "mailto:acm@rvce.edu.in",
       },
+      {
+        icon: "Phone",
+        label: "Chair Contact",
+        value: "+91 98765 43210",
+        link: "tel:+919876543210",
+      },
+      {
+        icon: "Phone",
+        label: "Vice Chair Contact",
+        value: "+91 98765 43211",
+        link: "tel:+919876543211",
+      },
     ],
   },
   socialLinks: [

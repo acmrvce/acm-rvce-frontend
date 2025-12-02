@@ -1,8 +1,46 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import React, { useRef } from "react";
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+// Spotlight Card Component
+const SpotlightCard = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  const background = useMotionTemplate`
+    radial-gradient(500px circle at ${mouseX}px ${mouseY}px, rgba(255,255,255,0.1), transparent 80%)
+  `;
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      className={cn("group relative overflow-hidden rounded-xl", className)}
+    >
+      <motion.div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background }}
+      />
+      <div className="relative">{children}</div>
+    </div>
+  );
+};
 
 interface MapEmbedProps {
   embedUrl: string;
@@ -13,51 +51,35 @@ interface MapEmbedProps {
 const MapEmbed: React.FC<MapEmbedProps> = ({
   embedUrl,
   title = "Location Map",
-  className
+  className,
 }) => {
   return (
-    <motion.div 
-      className={cn("w-full rounded-lg overflow-hidden shadow-sm border border-border", className)}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ 
-        duration: 0.5,
-        ease: [0.43, 0.13, 0.23, 0.96] as unknown as any
-      }}
-      whileHover={{ 
-        y: -5,
-        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)"
-      }}
-    >
-      <motion.div 
-        className="aspect-video w-full"
-        whileHover={{ scale: 1.01 }}
-        transition={{ type: "spring", stiffness: 200, damping: 30 }}
+    <SpotlightCard className={className}>
+      <motion.div
+        className="w-full rounded-xl overflow-hidden border border-neutral-200 dark:border-white/10 transition-all duration-300 hover:border-neutral-300 dark:hover:border-white/20"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.5,
+          ease: [0.43, 0.13, 0.23, 0.96] as unknown as any,
+        }}
       >
-        <iframe
-          src={embedUrl}
-          title={title}
-          width="100%"
-          height="100%"
-          style={{ border: 0 }}
-          allowFullScreen={true}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className="w-full h-full"
-        />
+        <div className="w-full h-full">
+          <iframe
+            src={embedUrl}
+            title={title}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen={true}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="w-full h-full"
+          />
+        </div>
       </motion.div>
-      
-      {/* Caption with subtle animation */}
-      <motion.div 
-        className="p-2 bg-card text-center text-sm text-muted-foreground"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
-        <p>R.V. College of Engineering, Mysore Road, Bengaluru</p>
-      </motion.div>
-    </motion.div>
+    </SpotlightCard>
   );
 };
 
-export default MapEmbed; 
+export default MapEmbed;
