@@ -205,7 +205,7 @@ const ExpandableWorkflow = () => {
           
           <div className="hidden md:block text-right">
             <p className="text-sm font-tech text-neutral-500 dark:text-neutral-400">
-              // HOVER TO EXPLORE <br/> THE WORKFLOW
+              {"// HOVER TO EXPLORE"} <br/> {"THE WORKFLOW"}
             </p>
           </div>
         </div>

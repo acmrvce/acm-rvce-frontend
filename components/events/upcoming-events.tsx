@@ -7,7 +7,7 @@ import { Calendar, MapPin, ArrowUpRight, Clock, X, Ticket, ChevronRight } from "
 
 // --- Hook: useOutsideClick (Inline definition to fix import error) ---
 function useOutsideClick(
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLElement | null>,
   handler: (event: MouseEvent | TouchEvent) => void
 ) {
   useEffect(() => {

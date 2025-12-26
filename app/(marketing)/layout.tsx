@@ -1,6 +1,5 @@
 import { Metadata } from "next"
 import { Header } from "@/components/global/header"
-import { headerConfig } from "@/lib/config/header"
 import Footer from "@/components/global/footer"
 import { footerConfig } from "@/lib/config/footer"
 
@@ -16,7 +15,7 @@ export default function DashboardLayout({
 }) {
   return (
         <main >
-            <Header config={headerConfig} />
+            <Header />
             <div className="min-h-screen w-full">
             {children}
             </div>
