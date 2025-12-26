@@ -202,12 +202,7 @@ const ExpandableWorkflow = () => {
               <span className="text-neutral-400 dark:text-neutral-600">Innovate.</span>
             </h2>
           </div>
-          
-          <div className="hidden md:block text-right">
-            <p className="text-sm font-tech text-neutral-500 dark:text-neutral-400">
-              {"// HOVER TO EXPLORE"} <br/> {"THE WORKFLOW"}
-            </p>
-          </div>
+
         </div>
 
         {/* The Accordion Container */}
