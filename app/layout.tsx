@@ -7,6 +7,9 @@ import { Toaster } from "@/components/ui/toaster"
 import { draftMode } from "next/headers"
 import { VisualEditing } from "next-sanity"
 import AlertBanner from "@/components/blog/disable-draft-mode"
+import Preloader from '@/components/global/preloader';
+import { TransitionProvider } from '@/components/global/transition-context';
+import TransitionOverlay from '@/components/global/transition-overlay';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,6 +31,8 @@ export default async function RootLayout({
       <body className={`${inter.className} h-full`}>
       {isDraftMode && <AlertBanner />}
 
+      <Preloader />
+
           <QueryProvider>
             <ThemeProvider
               attribute="class"
@@ -35,7 +40,10 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <TransitionProvider>
+                <TransitionOverlay />
+                {children}
+              </TransitionProvider>
             </ThemeProvider>
           </QueryProvider>
         <Toaster />

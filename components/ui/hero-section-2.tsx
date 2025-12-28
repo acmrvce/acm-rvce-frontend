@@ -1,229 +1,214 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, Play, Users, Globe, Award } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from "framer-motion";
+import { ArrowRight, Play, Users, Sparkles, Zap } from "lucide-react";
 
-// --- Fonts & Global Styles ---
+// --- Font Styles ---
 const FontStyles = () => (
   <style dangerouslySetInnerHTML={{__html: `
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500&display=swap');
-    
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap');
     .font-primary { font-family: 'Manrope', sans-serif; }
-    .font-tech { font-family: 'Space Grotesk', sans-serif; }
+    .font-tech { font-family: 'Space Grotesk', monospace; }
   `}} />
 );
 
-// --- Types ---
+// --- Props Interface ---
 interface HeroSectionProps {
-  className?: string;
-  title: string | React.ReactNode;
+  title: React.ReactNode;
   subtitle: string;
   callToAction: {
     text: string;
     href: string;
   };
   backgroundImage: string;
-  contactInfo: {
+  contactInfo?: {
     website: string;
     phone: string;
     address: string;
   };
 }
 
-// --- Components ---
 
-const GridBackground = () => (
-  <div className="absolute inset-0 z-0 pointer-events-none">
-    {/* Light Mode: Very faint black lines | Dark Mode: Very faint white lines */}
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px)] bg-[size:60px_100%]" />
-    <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] dark:bg-[linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:100%_60px]" />
-    
-    {/* Radial Fade to mask edges: White for light mode, Black for dark mode */}
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#ffffff_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,#050505_100%)]" />
-  </div>
-);
+// --- Spotlight Text ---
+const SpotlightText = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
-const Ticker = ({ text }: { text: string }) => (
-  <div className="overflow-hidden whitespace-nowrap py-3 border-t border-neutral-200 dark:border-white/5 bg-white/80 dark:bg-black/40 backdrop-blur-sm">
-    <motion.div 
-      className="flex min-w-full gap-12"
-      animate={{ x: ["0%", "-50%"] }}
-      transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
-    >
-      {[...Array(6)].map((_, i) => (
-        <span key={i} className="flex items-center gap-3 text-[10px] font-tech uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-600">
-          {text} <span className="h-0.5 w-0.5 rounded-full bg-neutral-400 dark:bg-neutral-700" />
-        </span>
-      ))}
-    </motion.div>
-  </div>
-);
+    function onMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+        const { left, top } = currentTarget.getBoundingClientRect();
+        mouseX.set(clientX - left);
+        mouseY.set(clientY - top);
+    }
 
-// --- Main Hero ---
+    return (
+        <div 
+            className={cn("relative group overflow-hidden", className)}
+            onMouseMove={onMouseMove}
+        >
+            <motion.div
+                className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                    background: useMotionTemplate`
+                        radial-gradient(
+                            200px circle at ${mouseX}px ${mouseY}px,
+                            rgba(255, 255, 255, 0.15),
+                            transparent 80%
+                        )
+                    `,
+                }}
+            />
+            {children}
+        </div>
+    )
+}
 
-const HeroSection = ({
-  className,
-  title = "Digital Reality",
-  subtitle,
-  callToAction,
-  backgroundImage,
-  contactInfo
-}: HeroSectionProps) => {
-  
+
+// --- Main Component ---
+const HeroSection = ({ title, subtitle, callToAction, backgroundImage }: HeroSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
-  
-  // Parallax effects
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 0.98]);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Removed opacity and scale transformations to keep image visible
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   return (
-    <section 
-        ref={containerRef}
-        className={cn(
-            // Base styles: Light mode (white/black text) / Dark mode (black/white text)
-            "relative min-h-screen w-full bg-white dark:bg-[#050505] text-neutral-900 dark:text-white font-primary overflow-hidden selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black pt-20", 
-            className
-        )}
+    <section
+      ref={containerRef}
+      className="relative min-h-[110vh] w-full bg-white dark:bg-[#050505] text-neutral-900 dark:text-white font-primary overflow-hidden pt-32 pb-20"
     >
       <FontStyles />
-      <GridBackground />
 
-      {/* Main Ambient Glow - Adjusted for visibility in both modes */}
-      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-100 dark:bg-indigo-900/10 rounded-full blur-[80px] pointer-events-none mix-blend-multiply dark:mix-blend-normal opacity-50 dark:opacity-100" />
+      {/* 1. Dynamic Background (Aurora) - Adapted for Light/Dark */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[20%] w-[40vw] h-[40vw] bg-purple-200/40 dark:bg-purple-500/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" />
+        <div className="absolute top-[10%] right-[10%] w-[30vw] h-[30vw] bg-blue-200/40 dark:bg-blue-500/10 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-200/40 dark:bg-indigo-500/10 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen" />
+        {/* Noise Texture - Subtle for both */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+      </div>
 
-      <div className="relative z-10 flex flex-col items-center max-w-[1400px] mx-auto px-6">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 flex flex-col items-center">
         
-        {/* 1. Typography Stack */}
-        <motion.div 
-            style={{ opacity: textOpacity }}
-            className="flex flex-col items-center text-center max-w-4xl mx-auto mt-8 mb-12 relative"
-        >
-            {/* Top Label */}
-            {/* <motion.div 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="mb-6 flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-md"
-            >
-                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-tech uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
-                    Accepting New Projects
-                </span>
-            </motion.div> */}
-
-            {/* Headline */}
-            <motion.h1 
+        {/* 2. Hero Content */}
+        <div className="text-center max-w-4xl mx-auto mb-16 relative">
+            
+            {/* Badge */}
+            <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1 }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-neutral-900 dark:text-white"
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-md mb-8 hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors cursor-default"
             >
-                {typeof title === 'string' ? title : title}
-            </motion.h1>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-xs font-tech font-medium tracking-widest uppercase text-neutral-600 dark:text-neutral-300">
+                    Accepting New Members
+                </span>
+            </motion.div>
 
-            {/* Subtitle */}
+            {/* Headline with Staggered Reveal */}
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.0] mb-6 text-neutral-900 dark:text-white">
+                {title}
+            </h1>
+
             <motion.p 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="mt-6 max-w-xl text-base sm:text-lg text-neutral-500 dark:text-neutral-400 font-light leading-relaxed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="text-lg md:text-xl text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-2xl mx-auto mb-10"
             >
                 {subtitle}
             </motion.p>
 
-            {/* Actions */}
+            {/* Action Buttons */}
             <motion.div 
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="mt-8 flex flex-wrap justify-center gap-3 mb-6"
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="flex flex-wrap items-center justify-center gap-4"
             >
-                <a 
-                    href={callToAction.href}
-                    className="group relative h-10 px-6 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-black text-sm font-semibold flex items-center gap-2 overflow-hidden hover:scale-105 transition-transform shadow-lg shadow-neutral-900/20 dark:shadow-none"
-                >
+                <button className="group relative h-12 px-8 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-black font-bold flex items-center gap-2 overflow-hidden hover:scale-105 transition-transform shadow-lg dark:shadow-none">
                     <span className="relative z-10">{callToAction.text}</span>
-                    <ArrowDown className="relative z-10 w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
-                </a>
-                
-                <button className="h-10 px-6 rounded-full border border-neutral-200 dark:border-white/10 hover:bg-neutral-100 dark:hover:bg-white/5 text-neutral-900 dark:text-white text-sm font-medium flex items-center gap-2 transition-colors">
-                    <Play className="w-3 h-3 fill-current" />
+                    <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    {/* Hover Fill */}
+                    <div className="absolute inset-0 bg-blue-600 dark:bg-blue-50 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
+                </button>
+
+                <button className="h-12 px-8 rounded-full border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm hover:bg-neutral-100 dark:hover:bg-white/10 text-neutral-900 dark:text-white font-medium flex items-center gap-2 transition-all hover:scale-105">
+                    <Play className="w-4 h-4 fill-current" />
                     <span>Explore</span>
                 </button>
             </motion.div>
-        </motion.div>
+        </div>
 
-        {/* 2. Visual Monolith (Cinematic Viewport) */}
-        <motion.div 
-            style={{ y: imageY, scale: imageScale }}
-            className="w-full relative z-20 perspective-1000 max-w-[1200px]" 
-        >
-            {/* --- GLOW EFFECT BEHIND IMAGE --- */}
-            {/* 1. Strong Top Center Glow - White/Blue tint depending on mode */}
-            <div className="absolute -top-[100px] left-1/2 -translate-x-1/2 w-[60%] h-[200px] bg-indigo-500/20 dark:bg-white/5 blur-[80px] rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-normal" />
+        {/* 3. The 3D Visual Stage */}
+        <div className="w-full relative perspective-[1200px] group">
+            {/* <ThreeDCard className="w-full"> */}
+                <motion.div
+                    style={{ y }} // Only parallax movement, no opacity fade
+                    className="relative w-full aspect-[21/9] md:aspect-[2.4/1] rounded-[2rem] overflow-hidden border border-neutral-200 dark:border-white/10 bg-neutral-100 dark:bg-neutral-900/50 shadow-2xl"
+                >
+                    {/* Main Image */}
+                    <Image 
+                        src={backgroundImage} 
+                        alt="ACM Community"
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                    
+                    {/* Overlay Gradient (Cinema style) */}
+                    <div className="absolute inset-0" />
+                    
+                    {/* Screen Glare Effect */}
+                    <div className="absolute -inset-full pointer-events-none" />
+
+                    {/* Floating Widgets (Parallax inside the 3D card) */}
+                    {/* Widget 1: Stats */}
+                    {/* <motion.div 
+                        className="absolute bottom-8 left-8 p-4 bg-white/80 dark:bg-black/40 backdrop-blur-md border border-neutral-200 dark:border-white/10 rounded-2xl flex items-center gap-4 shadow-xl translate-z-12"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 1 }}
+                    >
+                        <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
+                            <Users className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                            <div className="text-sm font-bold text-neutral-900 dark:text-white">500+ Members</div>
+                            <div className="text-xs text-neutral-500 dark:text-neutral-400 font-tech uppercase">Active Community</div>
+                        </div>
+                    </motion.div> */}
+
+                    {/* Widget 2: Status */}
+                    {/* <motion.div 
+                        className="absolute top-8 right-8 px-4 py-2 bg-emerald-100/80 dark:bg-emerald-500/20 backdrop-blur-md border border-emerald-200 dark:border-emerald-500/30 rounded-full flex items-center gap-2 shadow-xl translate-z-8"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 1.2 }}
+                    >
+                        <Zap className="w-3 h-3 text-emerald-600 dark:text-emerald-400 fill-emerald-600 dark:fill-emerald-400" />
+                        <span className="text-xs font-bold text-emerald-700 dark:text-emerald-200 uppercase tracking-wider">System Operational</span>
+                    </motion.div> */}
+
+                </motion.div>
+            {/* </ThreeDCard> */}
             
-            {/* 2. Wider Ambient Hue - Subtle blue for depth */}
-            <div className="absolute -top-[120px] left-1/2 -translate-x-1/2 w-[90%] h-[200px] bg-blue-100/50 dark:bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none mix-blend-multiply dark:mix-blend-screen" />
-
-            <motion.div
-                initial={{ opacity: 0, rotateX: 15, scale: 0.95 }}
-                animate={{ opacity: 1, rotateX: 0, scale: 1 }}
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
-                className="relative aspect-[2.4/1] w-full overflow-hidden rounded-t-2xl border-x border-t border-neutral-200 dark:border-white/15 bg-neutral-100 dark:bg-neutral-900 shadow-2xl shadow-neutral-200/50 dark:shadow-black/50"
-            >
-                {/* Image */}
-                <img 
-                    src={backgroundImage} 
-                    alt="Hero Visual" 
-                    className="absolute inset-0 w-full h-full object-cover opacity-90 dark:opacity-75"
-                />
-                
-                {/* Overlay Gradient: Fades from solid background at bottom to transparent at top */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent dark:from-[#050505] dark:via-transparent dark:to-transparent opacity-90 dark:opacity-90" />
-                
-                {/* Top Shine/Rim Light */}
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-neutral-900/10 dark:via-white/50 to-transparent opacity-50" />
-                
-                {/* UI Elements inside Screen */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-between items-end">
-                     <div className="hidden md:block">
-                        <p className="font-tech text-[10px] text-neutral-500 dark:text-neutral-500 uppercase mb-1">Current Project</p>
-                        <p className="text-lg font-bold text-neutral-900 dark:text-neutral-200">Fintech Ecosystem v4.0</p>
-                     </div>
-                     
-                     <div className="flex gap-3">
-                        <StatsCard icon={Users} label="Users" value="2.4M" />
-                        <StatsCard icon={Award} label="Awards" value="18" />
-                        <StatsCard icon={Globe} label="Reach" value="Global" />
-                     </div>
-                </div>
-            </motion.div>
-        </motion.div>
+            {/* Background Glow under the card */}
+            <div className="absolute -inset-4 bg-blue-500/20 blur-3xl -z-10 rounded-[3rem] opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+        </div>
 
       </div>
-
-      {/* 3. Footer Ticker */}
-      <div className="absolute bottom-0 left-0 w-full z-30">
-        <Ticker text="Design Engineering — Creative Strategy — Digital Products — Experience Design — " />
-      </div>
-
     </section>
   );
 };
 
-// Scaled down stats card
-const StatsCard = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => (
-    <div className="bg-white/60 dark:bg-black/40 backdrop-blur-md border border-neutral-200 dark:border-white/5 rounded-lg p-3 min-w-[80px] shadow-sm">
-        <Icon className="w-3.5 h-3.5 text-neutral-500 mb-1.5" />
-        <div className="text-sm font-bold leading-none text-neutral-900 dark:text-neutral-300">{value}</div>
-        <div className="text-[9px] text-neutral-500 uppercase font-tech mt-1">{label}</div>
-    </div>
-);
-
-HeroSection.displayName = "HeroSection";
-
-export { HeroSection };
+export default HeroSection;

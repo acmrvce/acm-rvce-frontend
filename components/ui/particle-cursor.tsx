@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 interface Particle {
@@ -33,6 +33,27 @@ const ParticleCursor: React.FC<ParticleCursorProps> = ({
   const lastEmitTime = useRef<number>(0);
   const particleId = useRef<number>(0);
 
+  const emitParticles = useCallback((x: number, y: number) => {
+    const newParticles: Particle[] = [];
+    
+    for (let i = 0; i < particleCount; i++) {
+      const size = particleSizeRange[0] + Math.random() * (particleSizeRange[1] - particleSizeRange[0]);
+      const lifespan = particleLifespan * (0.7 + Math.random() * 0.6); // Random lifespan variation
+      
+      newParticles.push({
+        id: particleId.current++,
+        x: x + (Math.random() * 20 - 10),
+        y: y + (Math.random() * 20 - 10),
+        size,
+        color,
+        lifespan,
+        createdAt: Date.now()
+      });
+    }
+    
+    setParticles(prevParticles => [...prevParticles, ...newParticles]);
+  }, [particleCount, particleSizeRange, particleLifespan, color]);
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -63,28 +84,7 @@ const ParticleCursor: React.FC<ParticleCursorProps> = ({
       window.removeEventListener('mousemove', handleMouseMove);
       clearInterval(intervalId);
     };
-  }, [trailDelay]);
-
-  const emitParticles = (x: number, y: number) => {
-    const newParticles: Particle[] = [];
-    
-    for (let i = 0; i < particleCount; i++) {
-      const size = particleSizeRange[0] + Math.random() * (particleSizeRange[1] - particleSizeRange[0]);
-      const lifespan = particleLifespan * (0.7 + Math.random() * 0.6); // Random lifespan variation
-      
-      newParticles.push({
-        id: particleId.current++,
-        x: x + (Math.random() * 20 - 10),
-        y: y + (Math.random() * 20 - 10),
-        size,
-        color,
-        lifespan,
-        createdAt: Date.now()
-      });
-    }
-    
-    setParticles(prevParticles => [...prevParticles, ...newParticles]);
-  };
+  }, [trailDelay, emitParticles]);
 
   if (!mousePosition) return null;
 

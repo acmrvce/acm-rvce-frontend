@@ -152,30 +152,6 @@ const ContactHero: React.FC<ContactHeroProps> = ({
             </svg>
           </motion.div>
         </motion.div>
-
-        {/* Image at the bottom */}
-        <motion.div
-          className="absolute bottom-0 w-full max-w-5xl"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{
-            duration: 1.2,
-            ease: [0.22, 1, 0.36, 1] as unknown as any,
-            delay: 0.4,
-          }}
-        >
-          <img
-            src={image}
-            alt="Contact page illustration"
-            className="w-full h-auto object-cover object-top [mask-image:linear-gradient(to_top,black_50%,transparent_100%)]"
-            onError={(e) => {
-              e.currentTarget.src =
-                "https://placehold.co/1280x720/1E293B/FFFFFF?text=Team+Photo";
-              e.currentTarget.onerror = null;
-            }}
-          />
-        </motion.div>
       </section>
     </>
   );

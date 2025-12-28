@@ -1,290 +1,328 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, useMotionTemplate, useMotionValue, animate } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { 
   BrainCircuit, 
-  Code2, 
   Smartphone, 
   ShieldCheck, 
   Cpu, 
   Palette, 
-  ArrowUpRight,
+  ArrowRight,
   Terminal,
   Globe,
-  Wifi,
-  Layers
+  Github,
+  Star,
+  ChevronRight
 } from "lucide-react";
 
 // --- Font Styles ---
 const FontStyles = () => (
   <style dangerouslySetInnerHTML={{__html: `
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap');
     .font-primary { font-family: 'Manrope', sans-serif; }
     .font-tech { font-family: 'Space Grotesk', monospace; }
   `}} />
 );
 
-// --- Visual Widgets for Cards ---
-
-const AIVisual = () => (
-  <div className="absolute right-4 top-4 w-32 h-32 opacity-20 pointer-events-none overflow-hidden">
-    <div className="absolute inset-0 grid grid-cols-3 gap-2">
-      {[...Array(9)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="rounded-full bg-blue-500"
-          animate={{ opacity: [0.2, 1, 0.2], scale: [0.8, 1.2, 0.8] }}
-          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-        />
-      ))}
-    </div>
-    <svg className="absolute inset-0 w-full h-full stroke-blue-500/50" strokeWidth="1">
-      <path d="M16 16 L48 48 M80 16 L48 48 M16 80 L48 48 M80 80 L48 48" />
-    </svg>
-  </div>
-);
-
-const CodeVisual = () => (
-  <div className="absolute right-[-20px] bottom-[-20px] w-48 h-32 bg-neutral-900/90 rounded-tl-xl border-l border-t border-white/10 p-4 font-tech text-[8px] text-emerald-400 opacity-60 backdrop-blur-sm pointer-events-none select-none">
-    <div className="flex gap-1 mb-2">
-      <div className="w-2 h-2 rounded-full bg-red-500"/>
-      <div className="w-2 h-2 rounded-full bg-yellow-500"/>
-      <div className="w-2 h-2 rounded-full bg-green-500"/>
-    </div>
-    <div className="flex flex-col gap-1">
-      <p><span className="text-purple-400">const</span> <span className="text-blue-400">future</span> = <span className="text-yellow-300">await</span> build();</p>
-      <p><span className="text-purple-400">if</span> (innovate) {"{"}</p>
-      <p className="pl-2">deploy(<span className="text-orange-400">"next-gen"</span>);</p>
-      <p>{"}"}</p>
-    </div>
-  </div>
-);
-
-const SecurityVisual = () => (
-  <div className="absolute right-6 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-2 border-dashed border-pink-500/30 animate-[spin_10s_linear_infinite] pointer-events-none">
-    <div className="absolute inset-2 rounded-full border border-pink-500/20 animate-[spin_5s_linear_infinite_reverse]" />
-    <div className="absolute inset-0 flex items-center justify-center">
-      <ShieldCheck className="w-8 h-8 text-pink-500/50" />
-    </div>
-  </div>
-);
-
-const IoTVisual = () => (
-  <div className="absolute bottom-4 right-4 flex gap-1 items-end h-16 pointer-events-none opacity-40">
-    {[...Array(5)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="w-3 bg-cyan-500/50 rounded-t-sm"
-        animate={{ height: ["20%", "80%", "40%"] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }}
-      />
-    ))}
-  </div>
-);
-
-const DesignVisual = () => (
-  <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-30">
-    <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-yellow-500 blur-xl" />
-    <div className="absolute top-8 right-12 w-16 h-16 rounded-full bg-orange-500 mix-blend-multiply blur-xl" />
-  </div>
-);
-
-// --- Types & Data ---
-type DomainItem = {
-  id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  icon: React.ElementType;
-  className?: string; 
-  gradient: string;
-  VisualComponent?: React.FC;
-};
-
-const domains: DomainItem[] = [
+// --- Data ---
+const domains = [
   {
     id: "01",
     title: "AI & Machine Intelligence",
     subtitle: "Predictive Systems",
-    description: "Building the brains of tomorrow through deep learning, neural networks, and generative AI research.",
+    description: "Building the brains of tomorrow through deep learning, neural networks, and generative AI research. We explore the cutting edge of what machines can learn.",
     icon: BrainCircuit,
-    className: "md:col-span-2 md:row-span-2 min-h-[320px]", 
-    gradient: "from-blue-500/10 via-indigo-500/10 to-transparent",
-    VisualComponent: AIVisual
+    color: "text-blue-500",
+    bgGradient: "from-blue-500/20 to-transparent",
+    border: "group-hover:border-blue-500/50"
   },
   {
     id: "02",
     title: "Full Stack Web",
     subtitle: "Digital Architectures",
-    description: "Crafting immersive, high-performance web experiences using modern frameworks and edge computing.",
+    description: "Crafting immersive, high-performance web experiences. We master modern frameworks, edge computing, and scalable cloud infrastructures.",
     icon: Globe,
-    className: "md:col-span-1 md:row-span-1 min-h-[280px]",
-    gradient: "from-emerald-500/10 via-teal-500/10 to-transparent",
-    VisualComponent: CodeVisual
+    color: "text-emerald-500",
+    bgGradient: "from-emerald-500/20 to-transparent",
+    border: "group-hover:border-emerald-500/50"
   },
   {
     id: "03",
     title: "App Development",
     subtitle: "Mobile Ecosystems",
-    description: "Engineering native and cross-platform solutions that put power in the palm of your hand.",
+    description: "Engineering native and cross-platform solutions. We put powerful, buttery-smooth applications into the palms of millions.",
     icon: Smartphone,
-    className: "md:col-span-1 md:row-span-1 min-h-[280px]",
-    gradient: "from-orange-500/10 via-red-500/10 to-transparent",
+    color: "text-orange-500",
+    bgGradient: "from-orange-500/20 to-transparent",
+    border: "group-hover:border-orange-500/50"
   },
   {
     id: "04",
     title: "Cybersecurity",
     subtitle: "Network Defense",
-    description: "Securing the digital frontier through ethical hacking, cryptography, and systems analysis.",
+    description: "Securing the digital frontier. Our ethical hackers and analysts dive deep into cryptography, network defense, and vulnerability assessment.",
     icon: ShieldCheck,
-    className: "md:col-span-2 md:row-span-1 min-h-[280px]",
-    gradient: "from-purple-500/10 via-pink-500/10 to-transparent",
-    VisualComponent: SecurityVisual
+    color: "text-purple-500",
+    bgGradient: "from-purple-500/20 to-transparent",
+    border: "group-hover:border-purple-500/50"
   },
   {
     id: "05",
     title: "IoT & Embedded",
     subtitle: "Connected Hardware",
-    description: "Bridging the physical and digital worlds with smart sensors and automation.",
+    description: "Bridging the physical and digital worlds. We hack hardware, program sensors, and automate the environment around us.",
     icon: Cpu,
-    className: "md:col-span-1 md:row-span-1 min-h-[280px]",
-    gradient: "from-cyan-500/10 via-blue-500/10 to-transparent",
-    VisualComponent: IoTVisual
+    color: "text-cyan-500",
+    bgGradient: "from-cyan-500/20 to-transparent",
+    border: "group-hover:border-cyan-500/50"
   },
   {
     id: "06",
     title: "Product Design",
     subtitle: "UI/UX & Art",
-    description: "Where aesthetics meet function. Designing interfaces that delight and inspire.",
+    description: "Where aesthetics meet function. We design interfaces that are not just usable, but delightful, accessible, and human-centric.",
     icon: Palette,
-    className: "md:col-span-1 md:row-span-1 min-h-[280px]",
-    gradient: "from-yellow-500/10 via-amber-500/10 to-transparent",
-    VisualComponent: DesignVisual
+    color: "text-yellow-500",
+    bgGradient: "from-yellow-500/20 to-transparent",
+    border: "group-hover:border-yellow-500/50"
   },
+  {
+    id: "git",
+    title: "Open Source Community",
+    subtitle: "GitHub & Collaboration",
+    description: "The heart of our code. Join our open source initiatives, star our repositories, and contribute to projects that matter.",
+    icon: Github,
+    color: "text-white",
+    bgGradient: "from-neutral-500/20 to-transparent",
+    border: "group-hover:border-white/50",
+    href: "https://github.com/acmrvce",
+    action: "Follow Us on GitHub"
+  }
 ];
 
-// --- Sub-Component: Spotlight Card ---
-const SpotlightCard = ({ children, className, gradient }: { children: React.ReactNode; className?: string; gradient: string }) => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+// --- Components ---
 
-  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-    const { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  }
-
+const DomainList = ({ 
+  activeId, 
+  setActiveId 
+}: { 
+  activeId: string; 
+  setActiveId: (id: string) => void;
+}) => {
   return (
-    <div
-      className={cn(
-        "group relative border border-neutral-200 dark:border-white/10 bg-white dark:bg-neutral-900 overflow-hidden rounded-3xl transition-all duration-500 hover:border-neutral-300 dark:hover:border-white/20",
-        className
-      )}
-      onMouseMove={handleMouseMove}
-    >
-      <motion.div
-        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
-        style={{
-          background: useMotionTemplate`
-            radial-gradient(
-              500px circle at ${mouseX}px ${mouseY}px,
-              rgba(255,255,255,0.1),
-              transparent 80%
-            )
-          `,
-        }}
-      />
-      <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br", gradient)} />
-      <div className="relative h-full">{children}</div>
+    <div className="flex flex-col w-full h-full justify-center">
+      {domains.map((item) => (
+        <div
+          key={item.id}
+          onMouseEnter={() => setActiveId(item.id)}
+          className={cn(
+            "group relative flex items-center justify-between py-6 md:py-8 cursor-pointer border-b border-neutral-200 dark:border-white/5 transition-all duration-300",
+            activeId === item.id ? "pl-4 md:pl-8 opacity-100" : "opacity-50 hover:opacity-80 hover:pl-2"
+          )}
+        >
+          {/* Active Indicator Line */}
+          <div className={cn(
+            "absolute left-0 top-0 bottom-0 w-1 bg-current transition-all duration-300",
+            activeId === item.id ? item.color.replace('text-', 'bg-') : "bg-transparent"
+          )} />
+
+          <div className="flex items-center gap-4 md:gap-8">
+            <span className="font-tech text-xs md:text-sm text-neutral-400 dark:text-neutral-600">
+              {item.id}
+            </span>
+            <h3 className={cn(
+              "text-2xl md:text-4xl font-bold tracking-tight transition-colors font-primary",
+              activeId === item.id ? "text-neutral-900 dark:text-white" : "text-neutral-500 dark:text-neutral-500"
+            )}>
+              {item.title}
+            </h3>
+          </div>
+
+          <div className={cn(
+            "hidden md:block transition-transform duration-300",
+            activeId === item.id ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
+          )}>
+            <ArrowRight className={cn("w-6 h-6", item.color)} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
 
-// --- Main Component ---
-const DomainsBento = () => {
+const DomainPreview = ({ activeDomain }: { activeDomain: typeof domains[0] }) => {
   return (
-    <section className="relative w-full bg-neutral-50 dark:bg-black py-24 px-6 lg:px-12 font-primary overflow-hidden">
-      <FontStyles />
+    <div className="relative w-full h-full min-h-[400px] md:min-h-[600px] rounded-3xl overflow-hidden bg-neutral-100 dark:bg-neutral-900/50 border border-neutral-200 dark:border-white/10 flex flex-col justify-between p-8 md:p-12 transition-colors duration-500">
       
-      {/* Grid Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#fafafa_100%)] dark:bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)]" />
+      {/* Dynamic Background Gradient */}
+      <motion.div
+        key={activeDomain.id + "bg"}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.8 }}
+        className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-30 dark:opacity-20",
+          activeDomain.bgGradient
+        )}
+      />
+
+      {/* Background Icon (Huge & decorative) */}
+      <motion.div
+        key={activeDomain.id + "icon-bg"}
+        initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="absolute -bottom-20 -right-20 opacity-[0.05] dark:opacity-[0.05] pointer-events-none"
+      >
+        <activeDomain.icon className="w-[400px] h-[400px] text-neutral-900 dark:text-white" />
+      </motion.div>
+
+      {/* Top Content */}
+      <div className="relative z-10">
+        <motion.div
+          key={activeDomain.id + "icon"}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className={cn(
+            "w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-white dark:bg-white/10 shadow-lg backdrop-blur-sm",
+            activeDomain.color
+          )}
+        >
+          <activeDomain.icon className="w-8 h-8" />
+        </motion.div>
+
+        <motion.div
+          key={activeDomain.id + "text"}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <span className={cn("font-tech text-xs uppercase tracking-widest mb-2 block", activeDomain.color)}>
+            {activeDomain.subtitle}
+          </span>
+          <h3 className="text-3xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-6 leading-tight">
+            {activeDomain.title}
+          </h3>
+          <p className="text-neutral-600 dark:text-neutral-300 text-lg leading-relaxed max-w-md">
+            {activeDomain.description}
+          </p>
+        </motion.div>
       </div>
 
-      <div className="relative z-10 max-w-[1400px] mx-auto">
+      {/* Bottom Action */}
+      <div className="relative z-10 mt-8">
+        {activeDomain.href ? (
+           <motion.a 
+             href={activeDomain.href}
+             target="_blank"
+             rel="noopener noreferrer"
+             initial={{ opacity: 0, y: 10 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.2 }}
+             className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-black font-bold shadow-lg hover:scale-105 transition-transform"
+           >
+              {activeDomain.id === 'git' ? <Star className="w-4 h-4 fill-current" /> : null}
+              {activeDomain.action || "Learn More"}
+              <ArrowRight className="w-4 h-4" />
+           </motion.a>
+        ) : (
+            <motion.div
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                className={cn("h-1 rounded-full opacity-0 mt-auto", activeDomain.color.replace('text-', 'bg-'))}
+            />
+        )}
+      </div>
+    </div>
+  );
+};
+
+// --- Mobile Card (Stacked Version) ---
+const MobileCard = ({ item }: { item: typeof domains[0] }) => (
+    <div className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-white/10 rounded-2xl p-6 relative overflow-hidden">
+        <div className={cn("absolute inset-0 opacity-10 bg-gradient-to-br", item.bgGradient)} />
+        
+        <div className="relative z-10 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+                <div className={cn("p-3 rounded-xl bg-white dark:bg-white/10 w-fit", item.color)}>
+                    <item.icon className="w-6 h-6" />
+                </div>
+                <span className="font-tech text-xs text-neutral-400">{item.id}</span>
+            </div>
+            
+            <div>
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">{item.description}</p>
+            </div>
+
+            {item.href && (
+                 <a href={item.href} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mt-2 hover:underline">
+                    {item.action || "Visit Link"} <ArrowRight className="w-3 h-3" />
+                 </a>
+            )}
+        </div>
+    </div>
+);
+
+// --- Main Component ---
+const DomainsBento = () => {
+  const [activeId, setActiveId] = useState("01");
+  const activeDomain = domains.find(d => d.id === activeId) || domains[0];
+
+  return (
+    <section className="relative w-full bg-white dark:bg-[#050505] py-24 px-4 lg:px-12 font-primary overflow-hidden border-t border-neutral-200 dark:border-white/10 ">
+      <FontStyles />
+      
+      <div className="max-w-[1400px] mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="max-w-2xl">
+        <div className="mb-16 md:mb-24">
             <div className="flex items-center gap-3 mb-4">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white">
                 <Terminal className="h-3 w-3" />
               </span>
               <span className="text-xs font-tech font-medium uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
-                / Our Expertise
+                / Technical Domains
               </span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.1]">
-              Technical <br className="hidden md:block" /> Domains.
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-neutral-900 dark:text-white leading-[0.9]">
+              Fields of <span className="text-neutral-400 dark:text-neutral-600">Excellence.</span>
             </h2>
-          </div>
-          
-          <div className="max-w-xs">
-            <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-              We explore the cutting edge of technology. From AI research to systems engineering, our chapters cover the entire digital spectrum.
-            </p>
-          </div>
         </div>
 
-        {/* The Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-auto">
-          {domains.map((domain) => (
-            <SpotlightCard 
-              key={domain.title} 
-              className={domain.className}
-              gradient={domain.gradient}
-            >
-              <div className="flex flex-col h-full justify-between p-8 relative z-10">
-                
-                {/* Top: Icon & ID */}
-                <div className="flex justify-between items-start">
-                  <div className="h-12 w-12 rounded-2xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-sm">
-                    <domain.icon className="h-6 w-6 text-neutral-900 dark:text-white" />
-                  </div>
-                  <span className="font-tech text-xs text-neutral-400/50 group-hover:text-neutral-400 transition-colors">
-                    {domain.id}
-                  </span>
-                </div>
+        {/* Desktop Layout: Split Screen */}
+        <div className="hidden lg:grid grid-cols-12 gap-12 h-[800px]">
+            {/* Left: The Index List */}
+            <div className="col-span-5 h-full flex flex-col justify-center">
+                <DomainList activeId={activeId} setActiveId={setActiveId} />
+            </div>
 
-                {/* Bottom: Text Content */}
-                <div className="mt-8">
-                  <div className="mb-4">
-                    <h3 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-1 group-hover:translate-x-1 transition-transform">
-                      {domain.title}
-                    </h3>
-                    <p className="font-tech text-[10px] uppercase tracking-widest text-blue-600 dark:text-blue-400 opacity-80">
-                      {domain.subtitle}
-                    </p>
-                  </div>
-                  
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-[90%] opacity-80 group-hover:opacity-100 transition-opacity">
-                    {domain.description}
-                  </p>
+            {/* Right: The Holographic Preview */}
+            <div className="col-span-7 h-full">
+                <AnimatePresence mode="wait">
+                    <motion.div 
+                        key={activeId}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="h-full"
+                    >
+                        <DomainPreview activeDomain={activeDomain} />
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+        </div>
 
-                  <div className="absolute bottom-6 right-6 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
-                    <div className="p-2 rounded-full bg-neutral-100 dark:bg-white/10">
-                       <ArrowUpRight className="h-4 w-4 text-neutral-900 dark:text-white" />
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </SpotlightCard>
-          ))}
+        {/* Mobile Layout: Stacked Cards */}
+        <div className="lg:hidden flex flex-col gap-4">
+            {domains.map(domain => (
+                <MobileCard key={domain.id} item={domain} />
+            ))}
         </div>
 
       </div>

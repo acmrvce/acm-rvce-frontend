@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { HeroSection } from '@/components/ui/hero-section-2';
+import HeroSection  from '@/components/ui/hero-section-2';
 
 const Hero: React.FC = () => {
   return (

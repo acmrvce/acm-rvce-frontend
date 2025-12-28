@@ -4,9 +4,9 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import TransitionLink from "./transition-link"
 
 interface NavigationMobileProps {
   navigationLinks: Array<{
@@ -30,7 +30,7 @@ export function NavigationMobile({ navigationLinks }: NavigationMobileProps) {
       <SheetContent side="right" className="w-full max-w-[300px] sm:w-[300px]">
         <nav className="flex flex-col gap-4">
           {navigationLinks.map((item) => (
-            <Link
+            <TransitionLink
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
@@ -42,7 +42,7 @@ export function NavigationMobile({ navigationLinks }: NavigationMobileProps) {
               )}
             >
               {item.label}
-            </Link>
+            </TransitionLink>
           ))}
         </nav>
       </SheetContent>

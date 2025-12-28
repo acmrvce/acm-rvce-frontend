@@ -6,6 +6,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useTheme } from "next-themes";
 import { Menu, X, Sun, Moon } from "lucide-react";
+import TransitionLink from "./transition-link";
 
 // --- Configuration ---
 const headerConfig = {
@@ -367,7 +368,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({ items, socialItems }) => 
              
              <div className="flex flex-1 flex-col justify-center gap-4 px-4 overflow-y-auto">
                 {items.map((item, idx) => (
-                    <a 
+                    <TransitionLink 
                         key={idx} 
                         href={item.href} 
                         onClick={toggleMenu}
@@ -375,7 +376,7 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({ items, socialItems }) => 
                     >
                         <span className="text-sm font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-blue-500">0{idx + 1}</span>
                         {item.label}
-                    </a>
+                    </TransitionLink>
                 ))}
              </div>
 
@@ -417,7 +418,7 @@ export function Header() {
             )}
         >
           {/* Logo */}
-          <a href="/" className="flex items-center gap-3 group">
+          <TransitionLink href="/" className="flex items-center gap-3 group">
              <div className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1 shadow-sm">
                 <img 
                   src={headerConfig.brand.logo} 
@@ -431,7 +432,7 @@ export function Header() {
              )}>
                 {headerConfig.brand.title}
              </span>
-          </a>
+          </TransitionLink>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:block">
@@ -441,7 +442,7 @@ export function Header() {
                   const isActive = pathname === item.href;
                   return (
                     <li key={item.href} className="relative">
-                      <a
+                      <TransitionLink
                         href={item.href}
                         onClick={() => setPathname(item.href)}
                         className={cn(
@@ -452,7 +453,7 @@ export function Header() {
                         )}
                       >
                         {item.label}
-                      </a>
+                      </TransitionLink>
                       {isActive && (
                         <motion.div
                           layoutId="nav-pill"

@@ -11,6 +11,7 @@ import ExpandableWorkflow from "@/components/landing/process/expandable-workflow
 
 import { UpcomingEvents } from "@/components/events/upcoming-events";
 import { FAQSection } from "@/components/events/FAQSection";
+import GithubHeatmap from "@/components/landing/github-activity/github-heatmap";
 
 const Page = async () => {
   const events = await client.fetch(topEventsQuery);
@@ -20,12 +21,13 @@ const Page = async () => {
       <Hero />
       <UpcomingEvents events={events} />
       <DomainsBento />  
+      {/* <GithubHeatmap /> */}
       <ProjectVelocity />
       <ExpandableWorkflow />
       {/* <EventsAndFAQs events={events} faqs={faqs} /> */}
       {/* <Expectations /> */}
       <FAQSection 
-        faqs={faqs}         
+        faqs={faqs} 
       />
     </React.Fragment>
   );
