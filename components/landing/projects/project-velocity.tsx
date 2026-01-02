@@ -30,57 +30,135 @@ const FontStyles = () => (
   `}} />
 );
 
-// --- Data: Achievements ---
-const achievements = [
-  {
-    id: 1,
-    title: "Smart India Hackathon",
-    member: "Team Syntax Error",
-    prize: "1st Runner Up",
-    category: "National Hackathon",
-    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop",
-    description: "Developed an AI-driven solution for crop disease detection using satellite imagery, helping farmers reduce yield loss by 30%."
-  },
-  {
-    id: 2,
-    title: "ICPC Regionals",
-    member: "Code Wizards",
-    prize: "Gold Medal",
-    category: "Competitive Coding",
-    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop",
-    description: "Qualified for the World Finals after solving 10/12 problems in the Asia-West regional contest, ranking in the top 5 nationwide."
-  },
-  {
-    id: 3,
-    title: "Google Cloud Hero",
-    member: "Ananya Sharma",
-    prize: "Champion",
-    category: "Cloud Computing",
-    image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1000&auto=format&fit=crop",
-    description: "Completed the cloud infrastructure challenge in record time, demonstrating mastery of Kubernetes and Serverless architectures."
-  },
-  {
-    id: 4,
-    title: "EthGlobal Scaling",
-    member: "BlockChain Gang",
-    prize: "$5k Grant",
-    category: "Web3",
-    image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=1000&auto=format&fit=crop",
-    description: "Built a zero-knowledge proof voting system for DAOs that ensures complete voter privacy while maintaining transparency."
-  },
-  {
-    id: 5,
-    title: "NASA Space Apps",
-    member: "AstroCoders",
-    prize: "Global Nominee",
-    category: "Innovation",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop",
-    description: "Created a real-time visualization tool for tracking near-earth asteroids using NASA's open API data."
-  },
+// --- Data: Internships (from public/internships folder) ---
+// Parse internship data from filenames
+// Format: "name - company.ext" or "name - company1, company2.ext"
+const parseInternshipFromFilename = (filename: string) => {
+  // Remove file extension
+  const nameWithoutExt = filename.replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+  
+  // Split by ' - ' to get parts
+  const parts = nameWithoutExt.split(' - ');
+  
+  if (parts.length >= 2) {
+    const [namePart, companyPart] = parts;
+    
+    // Capitalize name parts
+    const capitalizeName = (name: string) => {
+      return name.split(' ').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
+    };
+    
+    return {
+      member: capitalizeName(namePart.trim()),
+      title: companyPart.trim(),
+      prize: "Intern",
+      category: "Internship",
+    };
+  }
+  
+  // Fallback if format doesn't match
+  return {
+    member: nameWithoutExt,
+    title: "Tech Company",
+    prize: "Intern",
+    category: "Internship",
+  };
+};
+
+const internshipFiles = [
+  "Anirudh Kulkarni - Siemens, Teller, WIRIN, Samsung prism.avif",
+  "Aryan Chaturvedi - Skysecure.avif",
+  "Ayush  - EY.avif",
+  "Mehar Kulkarni - Dell.avif",
+  "Mihir - spiked ai.avif",
+  "Taha - IISC.jpg",
+  "aditya bhandari - microsoft.avif",
+  "aryan rai - scorpio group- geoserve.avif",
+  "kislay - CoinDCX.avif",
+  "prakhar jain - rolls royce (currently Verint).jpg",
+  "pranav - IISC.avif",
+  "priyanshu - Groww.avif",
+  "sai - samsung prism.avif",
+  "smruthi - deutche bank.avif",
+  "vishal - Linkedin, samsung Prism.jpg",
+  "yash - samsung prism.avif"
 ];
 
+const internships = internshipFiles.map((filename, index) => {
+  const parsed = parseInternshipFromFilename(filename);
+  return {
+    id: index + 1,
+    ...parsed,
+    image: `/internships/${filename}`,
+    description: `${parsed.member} secured an internship at ${parsed.title}, showcasing exceptional skills and dedication in their field.`
+  };
+});
+
+// --- Data: Achievements (from public/achievements folder) ---
+// Parse achievement data from filenames
+// Format: "name - event - position.ext" or "event - name - position.ext"
+const parseAchievementFromFilename = (filename: string) => {
+  // Remove file extension
+  const nameWithoutExt = filename.replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+  
+  // Split by ' - ' to get parts
+  const parts = nameWithoutExt.split(' - ');
+  
+  if (parts.length >= 3) {
+    // Try to identify which part is what
+    const [part1, part2, part3] = parts;
+    
+    // Capitalize name parts
+    const capitalizeName = (name: string) => {
+      return name.split(' ').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
+    };
+    
+    return {
+      member: capitalizeName(part1.trim()),
+      title: part2.trim(),
+      prize: capitalizeName(part3.trim()),
+      category: "Achievement",
+    };
+  }
+  
+  // Fallback if format doesn't match
+  return {
+    member: "ACM Member",
+    title: nameWithoutExt,
+    prize: "Winner",
+    category: "Achievement",
+  };
+};
+
+const achievementFiles = [
+  "yash sai - Hackotsav 2025 MAHE - Winner.jpeg",
+  "aryan rai - DSU X LETU(Texas, USA) International Innoquest - winner.jpg",
+  "vishal - codequest - 2nd place.jpeg",
+  "mohan, pranav - HackEEE 4.0 - 2nd place.jpg",
+  "taha - FOSS FEST 2025 - 3rd place.jpg",
+  "tallam sai - CMRIT CTF - 1st place.jpeg",
+  "tallam sai - Exuberance - runner up.jpeg",
+  "anirudh - warpspeed - winner.jpeg",
+  "Yash - Winner - SIH.jpg"
+];
+
+const achievements = achievementFiles.map((filename, index) => {
+  const parsed = parseAchievementFromFilename(filename);
+  return {
+    id: index + 1,
+    ...parsed,
+    image: `/achievements/${filename}`,
+    description: `Congratulations to ${parsed.member} for achieving ${parsed.prize} at ${parsed.title}! A remarkable achievement showcasing excellence and dedication.`
+  };
+});
+
 // --- Sub-Component: Achievement Card ---
-const AchievementCard = ({ item, onClick }: { item: typeof achievements[0], onClick: () => void }) => {
+type AchievementItem = typeof achievements[0] | typeof internships[0];
+const AchievementCard = ({ item, onClick }: { item: AchievementItem, onClick: () => void }) => {
   return (
     <div 
         onClick={onClick}
@@ -180,7 +258,7 @@ const AchievementModal = ({
     item, 
     onClose 
 }: { 
-    item: typeof achievements[0] | null, 
+    item: AchievementItem | null, 
     onClose: () => void 
 }) => {
     // Lock body scroll when open
@@ -300,7 +378,7 @@ const AchievementModal = ({
 
 // --- Main Component ---
 const ProjectVelocity = () => {
-  const [selectedItem, setSelectedItem] = useState<typeof achievements[0] | null>(null);
+  const [selectedItem, setSelectedItem] = useState<AchievementItem | null>(null);
 
   return (
     <section className="relative w-full bg-white dark:bg-[#050505] py-24 border-t border-neutral-200 dark:border-white/10 font-primary overflow-hidden">
@@ -328,8 +406,9 @@ const ProjectVelocity = () => {
       </div>
 
       <div className="relative z-10 flex flex-col gap-10">
+        {/* First Row: Internships (placeholder data - to be updated) */}
         <ParallaxText baseVelocity={-1.5}>
-            {achievements.map((item) => (
+            {internships.map((item) => (
                 <AchievementCard 
                     key={`row1-${item.id}`} 
                     item={item} 
@@ -338,6 +417,7 @@ const ProjectVelocity = () => {
             ))}
         </ParallaxText>
         
+        {/* Second Row: Real Achievements from public/achievements folder */}
         <ParallaxText baseVelocity={1.5}>
             {achievements.map((item) => (
                 <AchievementCard 
