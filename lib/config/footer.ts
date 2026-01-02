@@ -36,7 +36,7 @@ export const footerConfig: FooterConfig = {
         { href: "/blog", label: "Blog" },
         { href: "/team", label: "Team" },
         { href: "/events", label: "Events" },
-        { href: "/projects", label: "Projects" },
+        // { href: "/projects", label: "Projects" },
         { href: "/about", label: "About" },
         { href: "/contact", label: "Contact" },
       ],
