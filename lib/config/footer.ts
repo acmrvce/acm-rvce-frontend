@@ -26,7 +26,7 @@ export const footerConfig: FooterConfig = {
   brand: {
     title: "ACM RVCE",
     description: "Association for Computing Machinery - RVCE Student Chapter",
-    logoSrc: "/logos/acm_white_logo.jpg",
+    logoSrc: "/logos/acm-rvce-new-logo.png",
   },
   sections: [
     {
@@ -55,8 +55,16 @@ export const footerConfig: FooterConfig = {
   ],
   socialLinks: [
     { href: "https://github.com/acmrvce", label: "GitHub", icon: "Github" },
-    { href: "https://www.linkedin.com/company/acmrvce/", label: "LinkedIn", icon: "Linkedin" },
-    { href: "https://www.instagram.com/acm.rvce/", label: "Instagram", icon: "Instagram" },
+    {
+      href: "https://www.linkedin.com/company/acm-rvce/",
+      label: "LinkedIn",
+      icon: "Linkedin",
+    },
+    {
+      href: "https://www.instagram.com/acm.rvce/",
+      label: "Instagram",
+      icon: "Instagram",
+    },
     { href: "mailto:acm@rvce.edu.in", label: "Mail", icon: "Mail" },
   ],
   copyright: `Made with ❤️ by ACM RVCE • © ${new Date().getFullYear()}`,

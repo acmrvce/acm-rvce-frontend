@@ -80,21 +80,21 @@ const SpotlightCard = ({
 
 const acmStats = [
   {
-    value: "500+",
-    label: "Alumni Members",
-    icon: GraduationCap,
+    value: "2",
+    label: "Faculty Advisors",
+    icon: UserCheck,
     gradient: "from-blue-500/10 to-transparent",
   },
   {
-    value: "150+",
-    label: "Active Members",
-    icon: Users,
+    value: "10",
+    label: "Events Conducted",
+    icon: GraduationCap,
     gradient: "from-indigo-500/10 to-transparent",
   },
   {
-    value: "12",
-    label: "Faculty Advisors",
-    icon: UserCheck,
+    value: "200+",
+    label: "Active Members",
+    icon: Users,
     gradient: "from-violet-500/10 to-transparent",
   },
 ];

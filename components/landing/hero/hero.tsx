@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
-import HeroSection  from '@/components/ui/hero-section-2';
+import React from "react";
+import HeroSection from "@/components/ui/hero-section-2";
 
 const Hero: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const Hero: React.FC = () => {
       subtitle="ACM RVCE brings you opportunities to learn, innovate, and connect with the global tech community. Join us to accelerate your growth in computing and shape the future of technology."
       callToAction={{
         text: "BECOME A MEMBER",
-        href: "/register",
+        href: "https://forms.google.com/acm-rvce-membership",
       }}
       backgroundImage="/landing/acm-landing.jpg"
       contactInfo={{

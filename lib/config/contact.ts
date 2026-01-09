@@ -132,31 +132,31 @@ export const contactConfig: ContactConfig = {
       {
         icon: "Phone",
         label: "Chair Contact",
-        value: "+91 98765 43210",
-        link: "tel:+919876543210",
+        value: "+91 82170 40275",
+        link: "tel:+918217040275",
       },
       {
         icon: "Phone",
         label: "Vice Chair Contact",
-        value: "+91 98765 43211",
-        link: "tel:+919876543211",
+        value: "+91 96112 47230",
+        link: "tel:+919611247230",
       },
     ],
   },
   socialLinks: [
     {
       platform: "LinkedIn",
-      url: "https://www.linkedin.com/company/acm-rvce",
+      url: "https://www.linkedin.com/company/acm-rvce/",
       icon: "Linkedin",
     },
     {
       platform: "GitHub",
-      url: "https://github.com/acm-rvce",
+      url: "https://github.com/acmrvce",
       icon: "Github",
     },
     {
       platform: "Instagram",
-      url: "https://www.instagram.com/acm_rvce",
+      url: "https://www.instagram.com/acm.rvce/",
       icon: "Instagram",
     },
   ],
