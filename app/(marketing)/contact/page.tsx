@@ -27,7 +27,6 @@ export default function ContactPage() {
 
         <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 relative z-10">
           {/* Section Header */}
-         
 
           {/* Contact Form Section */}
           <motion.div
@@ -35,7 +34,7 @@ export default function ContactPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="max-w-4xl mx-auto mb-12 sm:mb-16"
+            className="max-w-4xl mx-auto mb-20 sm:mb-28 md:mb-32"
           >
             <div className="mb-8 text-center">
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3">

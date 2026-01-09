@@ -16,6 +16,7 @@ import {
   ArrowRight,
   ArrowLeft,
   Send,
+  Sparkles,
 } from "lucide-react";
 
 interface FormData {
@@ -136,34 +137,36 @@ export default function MultiStepContactForm() {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 p-6 sm:p-8 md:p-10 rounded-xl border border-green-200 dark:border-green-800/30 shadow-lg">
+        className="relative overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 p-8 sm:p-12 rounded-3xl border border-green-200/50 dark:border-green-800/30"
+      >
         <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/10 rounded-full blur-3xl" />
-        <div className="relative flex flex-col items-center text-center space-y-4">
+        <div className="relative flex flex-col items-center text-center space-y-6">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg"
+            className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-xl shadow-green-500/30"
           >
-            <CheckCircle2 className="w-12 h-12 text-white" />
+            <CheckCircle2 className="w-10 h-10 text-white" />
           </motion.div>
-          <motion.h3
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-2xl font-bold text-foreground"
-          >
-            Message Sent Successfully!
-          </motion.h3>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-muted-foreground max-w-md"
-          >
-            Thank you for reaching out. We'll get back to you as soon as
-            possible.
-          </motion.p>
+          <div>
+            <motion.h3
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-2xl sm:text-3xl font-bold text-foreground mb-2"
+            >
+              Message Sent!
+            </motion.h3>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-muted-foreground max-w-md"
+            >
+              Thank you for reaching out. We'll get back to you soon.
+            </motion.p>
+          </div>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -174,7 +177,7 @@ export default function MultiStepContactForm() {
                 setFormStatus("idle");
                 setCurrentStep(0);
               }}
-              className="mt-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg"
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg rounded-full px-8"
             >
               Send Another Message
             </Button>
@@ -189,21 +192,24 @@ export default function MultiStepContactForm() {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20 p-6 sm:p-8 md:p-10 rounded-xl border border-red-200 dark:border-red-800/30 shadow-lg">
-        <div className="flex flex-col items-center text-center space-y-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-lg">
-            <AlertCircle className="w-12 h-12 text-white" />
+        className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30 p-8 sm:p-12 rounded-3xl border border-red-200/50 dark:border-red-800/30"
+      >
+        <div className="flex flex-col items-center text-center space-y-6">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-xl shadow-red-500/30">
+            <AlertCircle className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">
-            Oops! Something went wrong
-          </h3>
-          <p className="text-muted-foreground max-w-md">
-            We couldn't send your message. Please try again or contact us directly.
-          </p>
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+              Something went wrong
+            </h3>
+            <p className="text-muted-foreground max-w-md">
+              We couldn't send your message. Please try again.
+            </p>
+          </div>
           <Button
             onClick={() => setFormStatus("idle")}
             variant="outline"
-            className="mt-4"
+            className="rounded-full px-8"
           >
             Try Again
           </Button>
@@ -212,112 +218,124 @@ export default function MultiStepContactForm() {
     );
   }
 
-  const CurrentStepIcon = steps[currentStep].icon;
-  const progress = ((currentStep + 1) / steps.length) * 100;
-
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      {/* Compact Progress Bar */}
-      <div className="mb-8">
-        <div className="flex items-center justify-center mb-6 px-4">
+    <div className="w-full max-w-3xl mx-auto">
+      {/* Modern Step Indicator */}
+      <div className="mb-10">
+        <div className="flex items-center justify-between mb-8">
           {steps.map((step, index) => {
             const isActive = index === currentStep;
             const isCompleted = index < currentStep;
+            const StepIcon = step.icon;
 
             return (
               <React.Fragment key={step.id}>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center relative">
                   <motion.div
                     className={cn(
-                      "w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 relative z-10",
+                      "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-all duration-500 relative overflow-hidden",
                       isActive
-                        ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50"
+                        ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/40"
                         : isCompleted
-                        ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
-                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-400"
+                          ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30"
+                          : "bg-neutral-100 dark:bg-neutral-800/50 text-neutral-400 dark:text-neutral-500"
                     )}
                     animate={{
-                      scale: isActive ? 1.15 : 1,
+                      scale: isActive ? 1.05 : 1,
                     }}
+                    transition={{ duration: 0.3 }}
                   >
                     {isCompleted ? (
-                      <CheckCircle2 className="w-6 h-6" />
+                      <CheckCircle2 className="w-7 h-7" />
                     ) : (
-                      <span>{step.id}</span>
+                      <StepIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+                    )}
+                    {isActive && (
+                      <motion.div
+                        className="absolute inset-0 bg-white/20"
+                        animate={{ opacity: [0.2, 0.4, 0.2] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
                     )}
                   </motion.div>
+                  <span
+                    className={cn(
+                      "mt-3 text-xs sm:text-sm font-semibold transition-colors text-center",
+                      isActive
+                        ? "text-blue-600 dark:text-blue-400"
+                        : isCompleted
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-neutral-400 dark:text-neutral-500"
+                    )}
+                  >
+                    {step.title}
+                  </span>
                 </div>
-                
-                {/* Arrow connector */}
+
+                {/* Connector Line */}
                 {index < steps.length - 1 && (
-                  <div className="flex items-center mx-3 sm:mx-6">
-                    <motion.svg
-                      className={cn(
-                        "w-8 h-8 sm:w-12 sm:h-12 transition-all duration-300",
-                        isCompleted
-                          ? "text-green-500"
-                          : "text-neutral-300 dark:text-neutral-700"
-                      )}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      initial={{ opacity: 0.5 }}
+                  <div className="flex-1 mx-2 sm:mx-4 h-1 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden relative top-[-12px] sm:top-[-14px]">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"
+                      initial={{ width: "0%" }}
                       animate={{
-                        opacity: isCompleted ? 1 : 0.5,
-                        scale: isCompleted ? 1.1 : 1,
+                        width: isCompleted ? "100%" : "0%",
                       }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2.5}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </motion.svg>
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
                   </div>
                 )}
               </React.Fragment>
             );
           })}
         </div>
-        
-        {/* Step Info */}
-        <div className="text-center">
-          <p className="text-xs sm:text-sm text-muted-foreground mb-1">
-            Step {currentStep + 1} of {steps.length}
-          </p>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">
-            {steps[currentStep].title}
-          </h3>
-        </div>
       </div>
 
-      {/* Form Card */}
+      {/* Form Card - Clean Modern Design */}
       <motion.div
-        className="relative overflow-hidden bg-white dark:bg-neutral-900 rounded-xl shadow-lg border border-neutral-200 dark:border-white/10"
+        className="relative bg-white dark:bg-neutral-900/80 rounded-3xl shadow-2xl shadow-neutral-200/50 dark:shadow-none border border-neutral-200/50 dark:border-white/10 overflow-hidden backdrop-blur-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        {/* Decorative gradient */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600" />
-        
-        <div className="p-4 sm:p-6 md:p-8">
+        {/* Gradient Top Border */}
+        <div className="h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600" />
+
+        {/* Form Header */}
+        <div className="px-6 sm:px-10 pt-8 pb-2">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-900/30">
+              <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
+                Step {currentStep + 1} of {steps.length}
+              </p>
+              <h3 className="text-xl sm:text-2xl font-bold text-foreground">
+                {steps[currentStep].description}
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 sm:p-10 pt-4 sm:pt-6">
           {/* Form Fields */}
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.3 }}
-              className="space-y-4 sm:space-y-5 mb-6 sm:mb-8"
+              className="space-y-6 mb-8"
             >
               {/* Step 1: Personal Info */}
               {currentStep === 0 && (
                 <>
-                  <div>
-                    <Label htmlFor="fullName" className="mb-2 flex items-center gap-2 text-sm font-medium">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="fullName"
+                      className="flex items-center gap-2 text-sm font-semibold"
+                    >
                       <User className="w-4 h-4 text-blue-600" />
                       Full Name <span className="text-red-500">*</span>
                     </Label>
@@ -326,21 +344,26 @@ export default function MultiStepContactForm() {
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleInputChange}
-                      placeholder="John Doe"
+                      placeholder="Enter your full name"
                       className={cn(
-                        "h-12 text-base",
-                        errors.fullName && "border-red-500 focus-visible:ring-red-500"
+                        "h-14 text-base rounded-xl border-2 bg-neutral-50 dark:bg-neutral-800/50 focus:bg-white dark:focus:bg-neutral-800 transition-all",
+                        errors.fullName
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : "border-neutral-200 dark:border-neutral-700 focus:border-blue-500"
                       )}
                     />
                     {errors.fullName && (
-                      <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
+                      <p className="text-sm text-red-500 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" />
                         {errors.fullName}
                       </p>
                     )}
                   </div>
-                  <div>
-                    <Label htmlFor="email" className="mb-2 flex items-center gap-2 text-sm font-medium">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="email"
+                      className="flex items-center gap-2 text-sm font-semibold"
+                    >
                       <Mail className="w-4 h-4 text-blue-600" />
                       Email Address <span className="text-red-500">*</span>
                     </Label>
@@ -350,14 +373,16 @@ export default function MultiStepContactForm() {
                       type="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      placeholder="john@example.com"
+                      placeholder="you@example.com"
                       className={cn(
-                        "h-12 text-base",
-                        errors.email && "border-red-500 focus-visible:ring-red-500"
+                        "h-14 text-base rounded-xl border-2 bg-neutral-50 dark:bg-neutral-800/50 focus:bg-white dark:focus:bg-neutral-800 transition-all",
+                        errors.email
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : "border-neutral-200 dark:border-neutral-700 focus:border-blue-500"
                       )}
                     />
                     {errors.email && (
-                      <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
+                      <p className="text-sm text-red-500 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" />
                         {errors.email}
                       </p>
@@ -369,8 +394,11 @@ export default function MultiStepContactForm() {
               {/* Step 2: Contact Details */}
               {currentStep === 1 && (
                 <>
-                  <div>
-                    <Label htmlFor="phone" className="mb-2 flex items-center gap-2 text-sm font-medium">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="phone"
+                      className="flex items-center gap-2 text-sm font-semibold"
+                    >
                       <Phone className="w-4 h-4 text-blue-600" />
                       Phone Number <span className="text-red-500">*</span>
                     </Label>
@@ -380,22 +408,27 @@ export default function MultiStepContactForm() {
                       type="tel"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      placeholder="1234567890"
+                      placeholder="10-digit phone number"
                       maxLength={10}
                       className={cn(
-                        "h-12 text-base",
-                        errors.phone && "border-red-500 focus-visible:ring-red-500"
+                        "h-14 text-base rounded-xl border-2 bg-neutral-50 dark:bg-neutral-800/50 focus:bg-white dark:focus:bg-neutral-800 transition-all",
+                        errors.phone
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : "border-neutral-200 dark:border-neutral-700 focus:border-blue-500"
                       )}
                     />
                     {errors.phone && (
-                      <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
+                      <p className="text-sm text-red-500 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" />
                         {errors.phone}
                       </p>
                     )}
                   </div>
-                  <div>
-                    <Label htmlFor="subject" className="mb-2 flex items-center gap-2 text-sm font-medium">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="subject"
+                      className="flex items-center gap-2 text-sm font-semibold"
+                    >
                       <MessageSquare className="w-4 h-4 text-blue-600" />
                       Subject <span className="text-red-500">*</span>
                     </Label>
@@ -404,14 +437,16 @@ export default function MultiStepContactForm() {
                       name="subject"
                       value={formData.subject}
                       onChange={handleInputChange}
-                      placeholder="How can we help you?"
+                      placeholder="What's this about?"
                       className={cn(
-                        "h-12 text-base",
-                        errors.subject && "border-red-500 focus-visible:ring-red-500"
+                        "h-14 text-base rounded-xl border-2 bg-neutral-50 dark:bg-neutral-800/50 focus:bg-white dark:focus:bg-neutral-800 transition-all",
+                        errors.subject
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : "border-neutral-200 dark:border-neutral-700 focus:border-blue-500"
                       )}
                     />
                     {errors.subject && (
-                      <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
+                      <p className="text-sm text-red-500 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" />
                         {errors.subject}
                       </p>
@@ -422,8 +457,11 @@ export default function MultiStepContactForm() {
 
               {/* Step 3: Message */}
               {currentStep === 2 && (
-                <div>
-                  <Label htmlFor="message" className="mb-2 flex items-center gap-2 text-sm font-medium">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="message"
+                    className="flex items-center gap-2 text-sm font-semibold"
+                  >
                     <MessageSquare className="w-4 h-4 text-blue-600" />
                     Your Message <span className="text-red-500">*</span>
                   </Label>
@@ -432,15 +470,17 @@ export default function MultiStepContactForm() {
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Tell us more about your inquiry..."
+                    placeholder="Share your thoughts, questions, or ideas with us..."
                     rows={6}
                     className={cn(
-                      "flex w-full rounded-lg border border-input bg-background px-4 py-3 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none",
-                      errors.message && "border-red-500 focus-visible:ring-red-500"
+                      "flex w-full rounded-xl border-2 bg-neutral-50 dark:bg-neutral-800/50 focus:bg-white dark:focus:bg-neutral-800 px-4 py-4 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none transition-all",
+                      errors.message
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : "border-neutral-200 dark:border-neutral-700 focus:border-blue-500"
                     )}
                   />
                   {errors.message && (
-                    <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
+                    <p className="text-sm text-red-500 flex items-center gap-1">
                       <AlertCircle className="w-3 h-3" />
                       {errors.message}
                     </p>
@@ -451,15 +491,15 @@ export default function MultiStepContactForm() {
           </AnimatePresence>
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+          <div className="flex items-center justify-between gap-4 pt-6 border-t border-neutral-100 dark:border-neutral-800">
             <Button
               type="button"
               onClick={handleBack}
               disabled={currentStep === 0}
-              variant="outline"
+              variant="ghost"
               size="lg"
               className={cn(
-                "flex items-center gap-2",
+                "flex items-center gap-2 rounded-full px-6 hover:bg-neutral-100 dark:hover:bg-neutral-800",
                 currentStep === 0 && "invisible"
               )}
             >
@@ -472,9 +512,9 @@ export default function MultiStepContactForm() {
                 type="button"
                 onClick={handleNext}
                 size="lg"
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-full px-8 shadow-lg shadow-blue-500/30"
               >
-                Next
+                Continue
                 <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (
@@ -483,7 +523,7 @@ export default function MultiStepContactForm() {
                 onClick={handleSubmit}
                 disabled={formStatus === "submitting"}
                 size="lg"
-                className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-full px-8 shadow-lg shadow-green-500/30"
               >
                 {formStatus === "submitting" ? (
                   <>
@@ -493,7 +533,7 @@ export default function MultiStepContactForm() {
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
-                    Submit
+                    Send Message
                   </>
                 )}
               </Button>

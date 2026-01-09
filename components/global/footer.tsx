@@ -68,7 +68,9 @@ const Footer = ({ className, config }: FooterProps) => {
               building the future.
             </p>
             <a
-              href="/join"
+              href="https://forms.google.com/acm-rvce-membership"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-blue-600 dark:bg-white px-8 font-medium text-white dark:text-black transition-all hover:scale-105"
             >
               <span className="relative z-10 flex items-center gap-2">
@@ -165,6 +167,17 @@ const Footer = ({ className, config }: FooterProps) => {
               Terms of Service
             </a>
           </div>
+        </div>
+
+        {/* 4. Developer Credits */}
+        <div className="border-t border-neutral-200 dark:border-white/10 py-4 text-center">
+          <p className="text-xs text-neutral-400 dark:text-neutral-500 font-footer-tech">
+            Developed by{" "}
+            <span className="text-neutral-600 dark:text-neutral-300">
+              Vishal K Bhat, Tharunkrishna M, Avinash Anish, Mohammad Taha
+              Sindoli
+            </span>
+          </p>
         </div>
 
         {/* Massive Watermark (Optional: Adds huge depth) */}
