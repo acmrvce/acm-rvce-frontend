@@ -8,6 +8,7 @@ import { useTheme } from "next-themes";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import TransitionLink from "./transition-link";
 import { usePathname } from "next/navigation";
+import { createPortal } from "react-dom";
 
 // --- Configuration ---
 const headerConfig = {
@@ -340,6 +341,10 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({ items, socialItems }) => 
     };
   }, [open]);
 
+  // Prevent hydration mismatch by mounting portal on client
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   return (
     <>
       <button 
@@ -350,45 +355,48 @@ const StaggeredMenu: React.FC<StaggeredMenuProps> = ({ items, socialItems }) => 
          <Menu className="h-5 w-5 text-neutral-900 dark:text-neutral-100" />
       </button>
 
-      <div 
-        className={cn(
-            "fixed inset-0 z-[100] bg-white dark:bg-[#0a0a0a] transition-transform duration-500 [transition-timing-function:cubic-bezier(0.76,0,0.24,1)]",
-            open ? "translate-x-0" : "translate-x-full"
-        )}
-      >
-        <div className="flex h-full flex-col p-8 font-header">
-             <div className="flex justify-end">
-                <button 
-                    onClick={toggleMenu}
-                    className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900 hover:scale-90 transition-transform"
-                >
-                    <X className="h-5 w-5 text-black dark:text-white" />
-                </button>
-             </div>
-             
-             <div className="flex flex-1 flex-col justify-center gap-4 px-4 overflow-y-auto">
-                {items.map((item, idx) => (
-                    <TransitionLink 
-                        key={idx} 
-                        href={item.href} 
-                        onClick={toggleMenu}
-                        className="group flex items-center gap-4 text-3xl sm:text-5xl font-bold tracking-tighter text-neutral-900 dark:text-white transition-colors hover:text-neutral-400"
-                    >
-                        <span className="text-sm font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-blue-500">0{idx + 1}</span>
-                        {item.label}
-                    </TransitionLink>
-                ))}
-             </div>
+      {mounted && createPortal(
+        <div 
+          className={cn(
+              "fixed inset-0 z-[100] bg-white dark:bg-[#0a0a0a] transition-transform duration-500 [transition-timing-function:cubic-bezier(0.76,0,0.24,1)]",
+              open ? "translate-x-0" : "translate-x-full"
+          )}
+        >
+          <div className="flex h-full flex-col p-8 font-header">
+               <div className="flex justify-end">
+                  <button 
+                      onClick={toggleMenu}
+                      className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900 hover:scale-90 transition-transform"
+                  >
+                      <X className="h-5 w-5 text-black dark:text-white" />
+                  </button>
+               </div>
+               
+               <div className="flex flex-1 flex-col justify-center gap-4 px-4 overflow-y-auto">
+                  {items.map((item, idx) => (
+                      <TransitionLink 
+                          key={idx} 
+                          href={item.href} 
+                          onClick={toggleMenu}
+                          className="group flex items-center gap-4 text-3xl sm:text-5xl font-bold tracking-tighter text-neutral-900 dark:text-white transition-colors hover:text-neutral-400"
+                      >
+                          <span className="text-sm font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-blue-500">0{idx + 1}</span>
+                          {item.label}
+                      </TransitionLink>
+                  ))}
+               </div>
 
-             <div className="flex gap-6 px-4 pt-8 border-t border-neutral-200 dark:border-neutral-800">
-                {socialItems.map((social, idx) => (
-                    <a key={idx} href={social.link} className="text-sm font-medium uppercase tracking-widest text-neutral-500 hover:text-black dark:hover:text-white transition-colors">
-                        {social.label}
-                    </a>
-                ))}
-             </div>
-        </div>
-      </div>
+               <div className="flex gap-6 px-4 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+                  {socialItems.map((social, idx) => (
+                      <a key={idx} href={social.link} target="_blank" rel="noopener noreferrer" className="text-sm font-medium uppercase tracking-widest text-neutral-500 hover:text-black dark:hover:text-white transition-colors">
+                          {social.label}
+                      </a>
+                  ))}
+               </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </>
   );
 };

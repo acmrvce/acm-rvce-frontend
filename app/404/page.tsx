@@ -44,7 +44,7 @@ export default function Custom404Page() {
         {/* Hero Typography */}
         <div className="text-center space-y-6 mb-16 max-w-3xl mx-auto">
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter font-primary">
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/50">
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-foregrouncheckd to-foreground/50">
               Recruitment
             </span>
             <br />
