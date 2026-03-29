@@ -29,16 +29,16 @@ function getEventPreviewsForCategory(
   const eventMap = new Map<string, { displayName: string; items: typeof categoryItems; latestDate: Date }>()
 
   categoryItems.forEach(item => {
-    // Use eventName if available, otherwise use title as fallback
-    const eventName = (item.eventName || item.title || 'Untitled Event') as string
-    const normalizedEventName = eventName.trim().toLowerCase()
+    // Use title as the display name (matches what users see in Sanity Studio)
+    const title = (item.title || 'Untitled Event') as string
+    const normalizedTitle = title.trim().toLowerCase()
     const date = item.date ? new Date(item.date) : new Date()
     
-    if (!eventMap.has(normalizedEventName)) {
-      eventMap.set(normalizedEventName, { displayName: eventName.trim(), items: [], latestDate: date })
+    if (!eventMap.has(normalizedTitle)) {
+      eventMap.set(normalizedTitle, { displayName: title.trim(), items: [], latestDate: date })
     }
     
-    const eventData = eventMap.get(normalizedEventName)!
+    const eventData = eventMap.get(normalizedTitle)!
     eventData.items.push(item)
     if (date > eventData.latestDate) {
       eventData.latestDate = date
@@ -86,17 +86,17 @@ function groupByEvent(items: GalleryItem[]): { [eventName: string]: GalleryItem[
 
   
   items.forEach(item => {
-    // Normalize the event name: trim whitespace and convert to lowercase for grouping
-    const normalizedEventName = item.eventName.trim().toLowerCase()
+    // Normalize the title: trim whitespace and convert to lowercase for grouping
+    const normalizedTitle = item.title.trim().toLowerCase()
     
     // Find existing group with same normalized name
     let groupKey = Object.keys(grouped).find(
-      key => key.trim().toLowerCase() === normalizedEventName
+      key => key.trim().toLowerCase() === normalizedTitle
     )
     
-    // If no group exists, use the current item's event name as the key
+    // If no group exists, use the current item's title as the key
     if (!groupKey) {
-      groupKey = item.eventName.trim()
+      groupKey = item.title.trim()
       grouped[groupKey] = []
     }
     
@@ -121,16 +121,16 @@ function groupByMonthTimeline(items: GalleryItem[]) {
     }
 
     const monthData = monthGroups.get(monthYear)!
-    const normalizedEventName = item.eventName.trim().toLowerCase()
+    const normalizedTitle = item.title.trim().toLowerCase()
     
-    // Find existing event with same normalized name
+    // Find existing event with same normalized title
     let eventKey = Object.keys(monthData.events).find(
-      key => key.trim().toLowerCase() === normalizedEventName
+      key => key.trim().toLowerCase() === normalizedTitle
     )
     
-    // If no event exists, use the current item's event name as the key
+    // If no event exists, use the current item's title as the key
     if (!eventKey) {
-      eventKey = item.eventName.trim()
+      eventKey = item.title.trim()
       monthData.events[eventKey] = { category: item.category, items: [] }
     }
 
