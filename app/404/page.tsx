@@ -44,7 +44,7 @@ export default function Custom404Page() {
         {/* Hero Typography */}
         <div className="text-center space-y-6 mb-16 max-w-3xl mx-auto">
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter font-primary">
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-2 to-foreground/50">
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/50">
               Recruitment
             </span>
             <br />
@@ -94,7 +94,7 @@ export default function Custom404Page() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center mb-12">
-          <Button asChild size="lg" className="h-12 px-8 rounded-full group w-full sm:w-auto shadow-lg hover:shadow-xl hover:shadow-primary/20 transition-all duration-300">
+          <Button asChild size="lg" className="h-12 px-8 rounded-full group w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all duration-300">
             <Link href="/" className="flex items-center gap-2">
               <Terminal className="w-4 h-4" />
               <span>Return Home</span>

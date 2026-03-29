@@ -4,8 +4,8 @@ import Footer from "@/components/global/footer"
 import { footerConfig } from "@/lib/config/footer"
 
 export const metadata: Metadata = {
-  title: "ACM RVCE",
-  description: "ACM RVCE",
+  title: "Recruitment Closed | ACM RVCE",
+  description: "Recruitment is currently closed. Check back for upcoming ACM RVCE membership updates.",
 }
 
 export default function DashboardLayout({
